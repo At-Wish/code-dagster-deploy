@@ -5,6 +5,8 @@ services:
       dockerfile: Dockerfile.dagster
     image: dagster-daemon:latest
     container_name: dagster-daemon
+    env_file:
+      - .env
     environment:
       - DAGSTER_HOME=/opt/dagster/dagster_home
       - DAGSTER_CURRENT_IMAGE=dagster-daemon:latest
@@ -17,11 +19,14 @@ services:
     networks:
       - dagster-network
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   postgres:
     image: postgres:15-alpine
     container_name: dagster-postgres
+    env_file:
+      - .env
     environment:
       POSTGRES_DB: dagster
       POSTGRES_USER: dagster
