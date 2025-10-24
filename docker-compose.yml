@@ -10,7 +10,7 @@ services:
     environment:
       - DAGSTER_HOME=/opt/dagster/dagster_home
       - DAGSTER_CURRENT_IMAGE=dagster-daemon:latest
-      - DAGSTER_POSTGRES_PASSWORD=${DAGSTER_POSTGRES_PASSWORD:-dagster_password}
+      - DAGSTER_POSTGRES_PASSWORD=dagster_password
     volumes:
       - ./dagster_home:/opt/dagster/dagster_home
       - ./workspace:/opt/dagster/workspace
@@ -30,7 +30,7 @@ services:
     environment:
       POSTGRES_DB: dagster
       POSTGRES_USER: dagster
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dagster_password}
+      POSTGRES_PASSWORD: dagster_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
