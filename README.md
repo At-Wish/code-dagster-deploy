@@ -24,20 +24,20 @@ nano .env
 
 ```bash
 # Build and start all services
-docker-compose up -d
+docker compose up -d
 
 # Check status
-docker-compose ps
+docker compose ps
 ```
 
 ### 3. Verify Setup
 
 ```bash
 # Check logs
-docker-compose logs dagster-daemon
+docker compose logs dagster-daemon
 
 # Check database
-docker-compose exec postgres pg_isready -U dagster -d dagster
+docker compose exec postgres pg_isready -U dagster -d dagster
 ```
 
 ## Project Structure
@@ -61,30 +61,30 @@ docker-compose exec postgres pg_isready -U dagster -d dagster
 ### List Available Jobs
 
 ```bash
-docker-compose exec dagster-daemon dagster job list
+docker compose exec dagster-daemon dagster job list
 ```
 
 ### Run a Job
 
 ```bash
 # Run ETL pipeline
-docker-compose exec dagster-daemon dagster job execute --job etl_pipeline
+docker compose exec dagster-daemon dagster job execute --job etl_pipeline
 
 # Run analytics pipeline
-docker-compose exec dagster-daemon dagster job execute --job analytics_pipeline
+docker compose exec dagster-daemon dagster job execute --job analytics_pipeline
 
 # Run ML pipeline
-docker-compose exec dagster-daemon dagster job execute --job ml_pipeline
+docker compose exec dagster-daemon dagster job execute --job ml_pipeline
 ```
 
 ### Check Run History
 
 ```bash
 # List all runs
-docker-compose exec dagster-daemon dagster run list
+docker compose exec dagster-daemon dagster run list
 
 # Get run details
-docker-compose exec dagster-daemon dagster run show <run-id>
+docker compose exec dagster-daemon dagster run show <run-id>
 ```
 
 ## Adding Projects from Different Repositories
@@ -279,7 +279,7 @@ load_from:
 ### 4. Restart Services
 
 ```bash
-docker-compose restart dagster-daemon
+docker compose restart dagster-daemon
 ```
 
 ## Common Operations
@@ -287,43 +287,43 @@ docker-compose restart dagster-daemon
 ### Start Services
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 ### Stop Services
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Restart Services
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### View Logs
 
 ```bash
 # All services
-docker-compose logs -f
+docker compose logs -f
 
 # Specific service
-docker-compose logs -f dagster-daemon
-docker-compose logs -f postgres
+docker compose logs -f dagster-daemon
+docker compose logs -f postgres
 ```
 
 ### Database Operations
 
 ```bash
 # Connect to database
-docker-compose exec postgres psql -U dagster -d dagster
+docker compose exec postgres psql -U dagster -d dagster
 
 # Backup database
-docker-compose exec postgres pg_dump -U dagster -d dagster > backup.sql
+docker compose exec postgres pg_dump -U dagster -d dagster > backup.sql
 
 # Restore database
-docker-compose exec -T postgres psql -U dagster -d dagster < backup.sql
+docker compose exec -T postgres psql -U dagster -d dagster < backup.sql
 ```
 
 ## Example Projects
