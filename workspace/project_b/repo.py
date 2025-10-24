@@ -3,7 +3,7 @@ Project B: Analytics and Reporting Pipeline
 This project handles data analytics, reporting, and dashboard updates.
 """
 
-from dagster import Definitions, job, op, AssetMaterialization, AssetKey, schedule, RunRequest
+from dagster import Definitions, job, op, AssetMaterialization, AssetKey, schedule, RunRequest, sensor, SensorEvaluationContext
 from dagster._core.definitions import asset
 import pandas as pd
 import logging
@@ -90,8 +90,25 @@ def daily_analytics_schedule(context):
     """Schedule analytics pipeline to run daily at 6 AM."""
     return RunRequest(run_key=f"daily_analytics_{context.scheduled_execution_time}")
 
+@sensor(job=analytics_pipeline)
+def data_quality_sensor(context: SensorEvaluationContext):
+    """Sensor that triggers analytics pipeline when data quality issues are detected."""
+    # Simulate checking for data quality issues
+    # In a real scenario, this would check external systems or databases
+    current_hour = datetime.now().hour
+    
+    # Trigger every 4 hours for demonstration
+    if current_hour % 4 == 0:
+        return RunRequest(
+            run_key=f"data_quality_check_{current_hour}",
+            tags={"trigger": "data_quality_sensor"}
+        )
+    
+    return None
+
 defs = Definitions(
     jobs=[analytics_pipeline],
     assets=[dashboard_data],
     schedules=[daily_analytics_schedule],
+    sensors=[data_quality_sensor],
 )

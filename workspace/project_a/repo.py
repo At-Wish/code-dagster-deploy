@@ -3,7 +3,7 @@ Project A: Data Pipeline for ETL Operations
 This project handles data extraction, transformation, and loading operations.
 """
 
-from dagster import Definitions, job, op, AssetMaterialization, AssetKey
+from dagster import Definitions, job, op, AssetMaterialization, AssetKey, schedule, ScheduleDefinition
 from dagster._core.definitions import asset
 import pandas as pd
 import logging
@@ -66,7 +66,18 @@ def daily_summary():
     logger.info("Generating daily summary...")
     return {"total_records": 1000, "success_rate": 0.95, "avg_processing_time": 2.5}
 
+@schedule(job=etl_pipeline, cron_schedule="0 2 * * *")  # Daily at 2 AM
+def etl_daily_schedule(context):
+    """Schedule for daily ETL pipeline execution."""
+    return {}
+
+@schedule(job=etl_pipeline, cron_schedule="*/5 * * * *")  # Every 5 minutes
+def etl_frequent_schedule(context):
+    """Schedule for frequent ETL pipeline execution every 5 minutes."""
+    return {}
+
 defs = Definitions(
     jobs=[etl_pipeline],
     assets=[daily_summary],
+    schedules=[etl_daily_schedule, etl_frequent_schedule],
 )

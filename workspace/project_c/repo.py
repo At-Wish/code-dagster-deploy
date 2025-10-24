@@ -3,7 +3,7 @@ Project C: Machine Learning Pipeline
 This project handles ML model training, validation, and deployment.
 """
 
-from dagster import Definitions, job, op, AssetMaterialization, AssetKey, sensor, RunRequest, SkipReason
+from dagster import Definitions, job, op, AssetMaterialization, AssetKey, sensor, RunRequest, SkipReason, AutoMaterializePolicy
 from dagster._core.definitions import asset
 import pandas as pd
 import numpy as np
@@ -113,9 +113,9 @@ def ml_pipeline():
     validation_results = validate_model(model_info)
     deploy_model(model_info, validation_results)
 
-@asset
+@asset(auto_materialize_policy=AutoMaterializePolicy.eager())
 def model_performance_metrics():
-    """Track model performance over time."""
+    """Track model performance over time with auto-materialization."""
     logger.info("Updating model performance metrics...")
     return {
         "current_accuracy": 0.85,
