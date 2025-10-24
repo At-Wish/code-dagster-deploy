@@ -1,42 +1,18 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-# Set environment variables
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV DAGSTER_HOME=/opt/dagster/dagster_home
+# Install Dagster packages from requirements.txt
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+# Set $DAGSTER_HOME and copy dagster.yaml and workspace.yaml there
+ENV DAGSTER_HOME=/opt/dagster/dagster_home/
 
-# Create dagster user
-RUN useradd --create-home --shell /bin/bash dagster
+RUN mkdir -p $DAGSTER_HOME
 
-# Set working directory
+COPY workspace/ /opt/dagster/workspace/ 
+
+COPY requirements.txt /opt/dagster/requirements.txt
+RUN pip install -r /opt/dagster/requirements.txt
+
+COPY pyproject.toml /opt/dagster/pyproject.toml
+
+
 WORKDIR /opt/dagster
-
-# Copy requirements first for better caching
-COPY requirements.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy workspace and configuration
-COPY workspace/ ./workspace/
-COPY dagster_home/ ./dagster_home/
-
-# Create necessary directories
-RUN mkdir -p /opt/dagster/logs && \
-    chown -R dagster:dagster /opt/dagster
-
-# Switch to dagster user
-USER dagster
-
-# Expose port
-EXPOSE 3000
-
-# Default command (can be overridden in docker-compose)
-CMD ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000"]

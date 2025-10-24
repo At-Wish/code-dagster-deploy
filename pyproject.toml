@@ -1,0 +1,6 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.dagster]
+dagster_home = "/opt/dagster/dagster_home"

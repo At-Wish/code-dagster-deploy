@@ -4,10 +4,10 @@
 storage:
   postgres:
     postgres_db:
-      hostname: postgres
-      db_name: ${DAGSTER_POSTGRES_DB}
-      username: ${DAGSTER_POSTGRES_USER}
-      password: ${DAGSTER_POSTGRES_PASSWORD}
+      hostname: docker_example_postgresql
+      db_name: postgres_db
+      username: postgres_user
+      password: postgres_password
       port: 5432
 
 run_coordinator:
