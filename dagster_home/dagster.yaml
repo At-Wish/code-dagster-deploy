@@ -5,8 +5,8 @@ storage:
   postgres:
     postgres_db:
       hostname: postgres
-      db_name: dagster
-      username: dagster
+      db_name: ${DAGSTER_POSTGRES_DB}
+      username: ${DAGSTER_POSTGRES_USER}
       password: ${DAGSTER_POSTGRES_PASSWORD}
       port: 5432
 

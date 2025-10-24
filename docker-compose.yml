@@ -10,7 +10,9 @@ services:
     environment:
       - DAGSTER_HOME=/opt/dagster/dagster_home
       - DAGSTER_CURRENT_IMAGE=dagster-daemon:latest
-      - DAGSTER_POSTGRES_PASSWORD=dagster_password
+      - DAGSTER_POSTGRES_USER=postgres_user
+      - DAGSTER_POSTGRES_PASSWORD=postgres_password
+      - DAGSTER_POSTGRES_DB=postgres_db
     volumes:
       - ./dagster_home:/opt/dagster/dagster_home
       - ./workspace:/opt/dagster/workspace
@@ -28,9 +30,9 @@ services:
     env_file:
       - .env
     environment:
-      POSTGRES_DB: dagster
-      POSTGRES_USER: dagster
-      POSTGRES_PASSWORD: dagster_password
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -39,7 +41,7 @@ services:
     networks:
       - dagster-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dagster -d dagster"]
+      test: ["CMD-SHELL", "pg_isready -U postgres_user -d postgres_db"]
       interval: 10s
       timeout: 5s
       retries: 5
