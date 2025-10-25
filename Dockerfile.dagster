@@ -3,17 +3,16 @@ FROM python:3.10-slim
 # Install Dagster packages from requirements.txt
 
 # Set $DAGSTER_HOME and copy dagster.yaml and workspace.yaml there
-ENV DAGSTER_HOME=/opt/dagster/dagster_home/
+ARG DAGSTER_HOME=/opt/dagster/dagster_home
+ENV DAGSTER_HOME=${DAGSTER_HOME}
 
 RUN mkdir -p $DAGSTER_HOME
-
-COPY workspace/ /opt/dagster/workspace/ 
 
 COPY requirements.txt /opt/dagster/requirements.txt
 RUN pip install -r /opt/dagster/requirements.txt
 
 COPY pyproject.toml /opt/dagster/pyproject.toml
 COPY dagster_home/dagster.yaml $DAGSTER_HOME/
-
+COPY workspace.yaml /opt/dagster/workspace.yaml
 
 WORKDIR /opt/dagster

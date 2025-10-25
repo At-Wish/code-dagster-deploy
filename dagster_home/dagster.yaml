@@ -12,7 +12,8 @@ run_coordinator:
     max_concurrent_runs: 5
     tag_concurrency_limits:
       - key: "operation"
-        value: "example"
+        value:
+          applyLimitPerUniqueValue: true
         limit: 5
 
 run_launcher:
