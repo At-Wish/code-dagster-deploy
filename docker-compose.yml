@@ -47,6 +47,7 @@ services:
     volumes: # Make docker client accessible so we can terminate containers from the webserver
       - /var/run/docker.sock:/var/run/docker.sock
       - ${IO_MANAGER_STORAGE_PATH}:${IO_MANAGER_STORAGE_PATH}
+      - ./workspace.yaml:/opt/dagster/workspace.yaml:ro
     networks:
       - ${DOCKER_NETWORK_NAME}
     depends_on:
